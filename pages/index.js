@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import msnLogoImage from '../assets/images/msn-logo-white.png'
 import config from '../config.json'
 
@@ -129,13 +130,15 @@ function FormInput ({ name, placeholder = "", type = 'text', ...props}) {
     );
 }
 
-function Form () {
+function Form ({ username, onChangeUsername }) {
     return (
         <>
             <form>
                 <FormInput
                     name="username"
                     placeholder="Username"
+                    value={username}
+                    onChange={(event) => onChangeUsername(event.target.value)}
                 />
                 <FormButton
                     label="Entrar"
@@ -280,7 +283,7 @@ function Register () {
 }
 
 function HomePage () {
-    const username = 'omariosouto';
+    const [username, setUsername] = useState('omariosouto');
 
     return (
         <>
@@ -294,7 +297,7 @@ function HomePage () {
                     />
                     <ProfilePicture img={`https://github.com/${username}.png`}/>
                     <Status />
-                    <Form />
+                    <Form username={username} onChangeUsername={setUsername} />
                     <Register />
                 </BorderDesktop>
             </Background>
