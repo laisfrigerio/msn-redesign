@@ -1,6 +1,6 @@
 # MSN Redesign 🏳
 
-Made with Next - Layout by Igor Monteiro | [Behance](https://www.behance.net/gallery/97236521/MSN-2020-Redesign?tracking_source=search_users_recommended)
+Made with Next - Inspired by Igor Monteiro's Layout | [Behance](https://www.behance.net/gallery/97236521/MSN-2020-Redesign?tracking_source=search_users_recommended)
 
 <p align="center">
   <a><img src="./screenshots/msn-redesign-aula-01.png" alt="Versão Mobile - Tela de Identificação" title="Versão Mobile - Tela de Identificação"></a>
