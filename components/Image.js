@@ -1,5 +1,5 @@
-function Image ({ src, ...props}) {
-    const addDefaultSrc = (event) => {
+function Image ({ src,  ...props}) {
+    function addDefaultSrc (event) {
         event.target.src = 'https://via.placeholder.com/150';
     }
 

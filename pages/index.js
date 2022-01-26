@@ -71,6 +71,11 @@ function FormButton ({ label, marginTop = "0px", variant = "primary", ...props }
                     cursor: pointer;
                 }
 
+                button[disabled] {
+                    background-color: #cccccc !important;
+                    color: gray !important;
+                }
+
                 button.primary {
                     background-color: ${config.theme.colors.primary.green};
                     color: ${config.theme.colors.primary.blue600} ;
@@ -242,9 +247,14 @@ function HomePage () {
                         width="170px"
                         src={msnLogoImage.src}
                     />
-                    <ProfilePicture img={`https://github.com/${username}.png`}/>
+                    <ProfilePicture
+                        img={`https://github.com/${username}.png`}
+                    />
                     <Status />
-                    <Form username={username} onChangeUsername={setUsername} />
+                    <Form
+                        username={username}
+                        onChangeUsername={setUsername}
+                        />
                     <Register />
                 </BorderDesktop>
             </Background>
