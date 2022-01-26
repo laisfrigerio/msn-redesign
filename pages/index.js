@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import msnLogoImage from '../assets/images/msn-logo-white.png'
-import config from '../config.json'
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import msnLogoImage from '../assets/images/msn-logo-white.png';
+import config from '../config.json';
 
 function BorderDesktop ({ children }) {
     return (
@@ -116,9 +117,16 @@ function FormInput ({ name, placeholder = "", type = 'text', ...props}) {
 }
 
 function Form ({ username, onChangeUsername }) {
+    const router = useRouter();
+
+    const onSubmit = (event) => {
+        event.preventDefault();
+        router.push('/chat');
+    }
+
     return (
         <>
-            <form>
+            <form onSubmit={onSubmit}>
                 <FormInput
                     name="username"
                     placeholder="Username"
