@@ -4,10 +4,13 @@
       "colors": {
         "primary": {
           "green": "#29FF8F",
+          "blue100": "#EBF4F9",
           "blue400": "#43BBFA",
           "blue450": "#0779e7",
           "blue500": "#0089FF",
-          "blue600": "#0042F7"
+          "blue600": "#0042F7",
+          "blue700": "#5E7DAC",
+          "blue750": "#36537E"
         },
         "neutrals": {
           "white": "#FFFFFF"
