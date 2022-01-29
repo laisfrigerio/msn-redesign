@@ -218,7 +218,7 @@ function ProfilePage () {
         <>
             <Background>
                 <HeaderProfile userData={userData} />
-                <Favorites following={following} />
+                <Favorites following={following.slice(-13)} />
             </Background>
         </>
     );
