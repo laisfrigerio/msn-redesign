@@ -1,28 +1,11 @@
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { ArrowDown } from '../../components/ArrowDown'
+import { ArrowDown } from '../../components/ArrowDown';
+import { Background } from '../../components/Background';
 import { ProfilePicture } from '../../components/ProfilePicture';
+import { useUserData } from '../../hooks/useUserData';
 import config from '../../config.json';
-
-function Background ({ children }) {
-    const { white } = config.theme.colors.neutrals;
-    
-    return (
-        <>
-            <section>{children}</section>
-            <style jsx>{`
-                section {
-                    background: ${white};
-                    height: 100%;
-                    width: 100%;
-                    max-width: 600px;
-                    margin: 20px auto 0;
-                    box-shadow: 0 8px 4px 0 rgb(229 229 229);
-                }
-            `}</style>
-        </>
-    );
-}
 
 function HeaderProfile ({ userData }) {
     const { blue700, blue750 } = config.theme.colors.primary;
@@ -86,7 +69,7 @@ function HeaderProfile ({ userData }) {
     );
 }
 
-function Favorites ({ following }) {
+function Favorites ({ following, username }) {
     const { blue100, blue700, blue750 } = config.theme.colors.primary;
     const { white } = config.theme.colors.neutrals;
 
@@ -96,13 +79,25 @@ function Favorites ({ following }) {
 
     const renderUser = ({ avatar_url, id, html_url, login }) => {
         return (
-            <li className='card-user' key={id}>
-                <ProfilePicture img={avatar_url} />
-                <div>
-                    <p>{login}</p>
-                    <small>{html_url}</small>
-                </div>
-            </li>
+            <>
+                <li className='card-user' key={id}>
+                    <ProfilePicture img={avatar_url} />
+                    <Link href={`/chat/${login}`}>
+                        <a>
+                            <p>{login}</p>
+                            <small>{html_url}</small>
+                        </a>
+                    </Link>
+                </li>
+                <style jsx>{`
+                    li  {
+                        cursor: pointer;
+                    }
+                    a {
+                        text-decoration: none;
+                    }
+                `}</style>
+            </>
         );
     }
 
@@ -179,21 +174,11 @@ function Favorites ({ following }) {
 }
 
 function ProfilePage () {
-    const [userData, setUserData] = useState(null);
     const [following, setFollowing] = useState([]);
 
     const router = useRouter();
-    const { username } = router.query
-
-    useEffect(() => {
-        if (!username) {
-            return;
-        }
-
-        fetch(`https://api.github.com/users/${username}`)
-            .then((response) => response.json())
-            .then((data) => setUserData(data))
-    }, [username]);
+    const { username } = router.query;
+    const userData = useUserData(username);
 
     useEffect(() => {
         if (!userData) {
@@ -218,7 +203,10 @@ function ProfilePage () {
         <>
             <Background>
                 <HeaderProfile userData={userData} />
-                <Favorites following={following.slice(-13)} />
+                <Favorites
+                    following={following.slice(-13)}
+                    username={username}
+                />
             </Background>
         </>
     );
