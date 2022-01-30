@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Background } from '../../../components/Background';
-import { HeaderChat } from '../../../components/HeaderChat';
+import { Header } from '../../../components/Header';
 import { Send } from '../../../icons/Send';
 import { useUserData } from '../../../hooks/useUserData';
 import config from '../../../config.json';
@@ -159,8 +159,8 @@ function Chat ({ currentUser, currentMessage, setCurrentMessage, messages, setMe
 
 function ChatPage () {
     const router = useRouter();
-    const currentUser = useUserData(router.query.currentuser);
-    const chatUser = useUserData(router.query.chatuser);
+    const currentUser = useUserData(router.query.user);
+    const chatUser = useUserData(router.query.slug);
 
     const [currentMessage, setCurrentMessage] = useState("");
     const [messages, setMessages] = useState([]);
@@ -168,7 +168,7 @@ function ChatPage () {
     return (
         <>
             <Background>
-                <HeaderChat userData={chatUser} />
+                <Header userData={chatUser} />
                 <Chat
                     currentUser={currentUser}
                     currentMessage={currentMessage}

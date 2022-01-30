@@ -2,22 +2,22 @@ import { ProfilePicture } from './ProfilePicture';
 import { LoadingHeader } from './LoadingHeader';
 import config from '../config.json';
 
-function HeaderChat ({ userData }) {
+function Header ({ userData }) {
     const { blue700, blue750 } = config.theme.colors.primary;
 
     if (!userData) {
         return (<LoadingHeader />);
     }
 
-    const { avatar_url, bio, name } = userData
+    const { avatar_url, bio, html_url, name, login } = userData
 
     return (
         <>
             <div className='header-chat'>
                 <ProfilePicture img={avatar_url} />
                 <div className='profile-name-status'>
-                    <p>{name}</p>
-                    <small>{bio}</small>
+                    <p>{name || login}</p>
+                    <small>{bio || html_url}</small>
                 </div>
             </div>
             <style jsx>{`
@@ -62,4 +62,4 @@ function HeaderChat ({ userData }) {
     );
 }
 
-export { HeaderChat }
+export { Header }

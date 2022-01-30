@@ -115,7 +115,7 @@ function Form ({ username, onChangeUsername }) {
 
     const onSubmit = (event) => {
         event.preventDefault();
-        router.push(`/profile/${username}`);
+        router.push(`/chat/${username}`);
     }
 
     return (
