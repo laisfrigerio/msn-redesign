@@ -7,7 +7,7 @@ import { Header } from '../../components/Header';
 import { Skeleton } from '../../components/Skeleton';
 import { SkeletonHeaderProfile } from '../../components/SkeletonHeaderProfile';
 import { useUserData } from '../../hooks/useUserData';
-import { getChats, subscribeChats } from '../../supabase';
+import { getChats, saveChat, subscribeChats } from '../../supabase';
 import config from '../../config.json';
 
 function BackgroundList ({ children }) {
@@ -40,6 +40,102 @@ function HeaderProfile ({ userData }) {
     );
 }
 
+function AddChat ({ setAddNewChat }) {
+    const [chatName, setChatName] = useState('');
+    const [chatDescrition, setChatDescrition] = useState('');
+    const { green, blue750 } = config.theme.colors.primary;
+    const { gray300, gray600 } = config.theme.colors.neutrals;
+
+    const [disabled, setDisabled]  = useState(false);
+
+    function sendChat (event) {
+        event.preventDefault();
+        
+        setDisabled(true);
+
+        const payload = {
+            name: chatName,
+            description: chatDescrition
+        }
+
+        saveChat(payload)
+            .then((response) => {
+                if (response) {
+                    setChatName('');
+                    setChatDescrition('');
+                    setAddNewChat(false);
+                }
+
+                setDisabled(true);
+            });
+    }
+
+    return (
+        <>
+            <form>
+                <input
+                    placeholder="Chat name"
+                    value={chatName}
+                    onChange={(event) => setChatName(event.target.value)}
+                />
+
+                <input
+                    placeholder="Chat description"
+                    value={chatDescrition}
+                    onChange={(event) => setChatDescrition(event.target.value)}
+                />
+                <button
+                    disabled={chatName === '' || chatName.length < 3 || disabled}
+                    onClick={sendChat}
+                >
+                    Save
+                </button>
+            </form>
+            <style jsx>{`
+                form {
+                    display: flex;
+                    flex-direction: column;
+                    border-radius: 10px;
+                    gap: 16px;
+                    // padding: 16px;
+                    margin-top: 50px;
+                    // border: 1px solid ${blue750};
+                }
+
+                input {
+                    color: ${blue750};
+                    height: 48px;
+                    padding: 8px 12px;
+                    position: relative;
+                    width: 100%;
+                    border: 1px solid #dae8ef;
+                    border-radius: 16px;
+                }
+
+                input:focus {
+                    outline: 1px solid #516a8f;
+                }
+
+                button {
+                    background: ${green};
+                    color: ${blue750};
+                    font-weight: bold;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    height: 48px;
+                    padding: 10px;
+                    width: fit-content;
+                }
+
+                button:disabled {
+                    background: ${gray300};
+                    color: ${gray600};
+                }
+            `}</style>
+        </>
+    );
+}
+
 function ListChatItem ({ chat, username }) {
     const { blue700, blue750 } = config.theme.colors.primary;
     const { white } = config.theme.colors.neutrals;
@@ -63,11 +159,12 @@ function ListChatItem ({ chat, username }) {
                     gap: 8px;
                     background: ${white};
                     border-radius: 10px;
-                    padding: 12px;
                     margin-bottom: 12px;
                 }
                 a {
                     text-decoration: none;
+                    padding: 12px;
+                    width: 100%;
                 }
 
                 li p {
@@ -82,7 +179,7 @@ function ListChatItem ({ chat, username }) {
     );
 }
 
-function ListChatHeader () {
+function ListChatHeader ({ addNewChat, setAddNewChat }) {
     const { green, blue700 } = config.theme.colors.primary;
 
     return (
@@ -92,7 +189,10 @@ function ListChatHeader () {
                     <p>Chat</p>
                     <ArrowDown />
                 </div>
-                <div className='chat-new'>+</div>
+                <button
+                    className='chat-new'
+                    onClick={() => setAddNewChat(!addNewChat)}
+                >+</button>
             </div>
             <style jsx>{`
                 .chat-header {
@@ -119,6 +219,7 @@ function ListChatHeader () {
                     align-items: center;
                     justify-content: center;
                     background: ${green};
+                    color: ${blue700};
                     border-radius: 50%;
                     cursor: pointer;
                     font-size: 16px;
@@ -131,7 +232,7 @@ function ListChatHeader () {
     );
 }
 
-function ListChats ({ chats, username }) {
+function ListChats ({ chats, username, addNewChat, setAddNewChat }) {
     if (!chats.length) {
         return (
             <>
@@ -157,8 +258,9 @@ function ListChats ({ chats, username }) {
     return (
         <>
             <BackgroundList>
-                <ListChatHeader />
-                <ul>
+                <ListChatHeader addNewChat={addNewChat} setAddNewChat={setAddNewChat} />
+                {addNewChat && (<AddChat setAddNewChat={setAddNewChat}/>)}
+                {!addNewChat && (<ul>
                     {chats.map((chat) => {
                         return (
                             <ListChatItem
@@ -168,7 +270,7 @@ function ListChats ({ chats, username }) {
                             />
                         );
                     })}
-                </ul>
+                </ul>)}
             </BackgroundList>
         </>
     );
@@ -176,6 +278,7 @@ function ListChats ({ chats, username }) {
 
 function ListChatPage () {
     const [chats, setChats] = useState([]);
+    const [addNewChat, setAddNewChat] = useState(false);
 
     const router = useRouter();
     const { username } = router.query;
@@ -202,6 +305,8 @@ function ListChatPage () {
                 <ListChats
                     chats={chats}
                     username={username}
+                    addNewChat={addNewChat}
+                    setAddNewChat={setAddNewChat}
                 />
             </Background>
         </>

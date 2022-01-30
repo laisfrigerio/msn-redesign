@@ -8,7 +8,7 @@ async function getChat (chatId) {
     return supabaseClient
         .from('chat')
             .select('*')
-            .eq('chat.id', chatId)
+            .filter('id', 'in', `(${chatId})`)
             .order('id', {ascending: false})
         .then(({ data }) => data.length ? data[0] : null)
         .catch(() => null);
@@ -33,16 +33,16 @@ function getMessagesByChat (chatId) {
         .catch(() => []);
 }
 
-function saveChat (payload) {
+async function saveChat (payload) {
+    console.log('saveChat');
     return supabaseClient
         .from('chat')
         .insert([ payload ])
-        .then(({ data }) => {
-            console.log('Insert chat data', data);
-        })
+        .then(({ data }) => data.length ? data[0] : null)
+        .catch(() => null)
 }
 
-function saveMessage (payload) {
+async function saveMessage (payload) {
     return supabaseClient
         .from('messages')
         .insert([ payload ])
@@ -51,11 +51,11 @@ function saveMessage (payload) {
         })
 }
 
-function subscribeChats () {
+function subscribeChats (addChat) {
     return supabaseClient
         .from('chat')
-        .on('INSERT', () => console.log('Houve um insert no chat'))
-        .subscribe()
+        .on('INSERT', (response) => addChat(response.new))
+        .subscribe();
 }
 
 function subscribeMessagesByChat (chatId, addMessage) {

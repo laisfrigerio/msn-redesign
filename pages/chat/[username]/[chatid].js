@@ -251,6 +251,9 @@ function ChatPage () {
     const [currentMessage, setCurrentMessage] = useState("");
     const [messages, setMessages] = useState([]);
 
+    console.log('chatId', chatId);
+    console.log('chatInfo', chatInfo);
+
     useEffect(() => {
         getChat(chatId).then(data => setChatInfo(data));
     }, [])
