@@ -1,10 +1,46 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Background } from '../../../components/Background';
 import { Header } from '../../../components/Header';
+import { LoadingHeader } from '../../../components/LoadingHeader';
 import { Send } from '../../../icons/Send';
 import { useUserData } from '../../../hooks/useUserData';
+import { getChat } from '../../../supabase';
 import config from '../../../config.json';
+
+function ChatInfo ({ chatInfo }) {
+    if (!chatInfo) {
+        return (<LoadingHeader />);
+    }
+    
+    const { name, description } = chatInfo
+    const { blue100, blue700, blue750 } = config.theme.colors.primary;
+
+    return (
+        <>
+            <section>
+                <p>{name}</p>
+                <small>{description}</small>
+            </section>
+            <style jsx>{`
+                section {
+                    background: ${blue100};
+                    margin: 0 12px 16px;
+                    padding: 16px;
+                    border-radius: 10px;
+                }
+
+                p {
+                    color: ${blue750};
+                }
+
+                small {
+                    color: ${blue700};
+                }
+            `}</style>
+        </>
+    );
+}
 
 function Message ({ content, user }) {
     const { green, blue100, blue700, blue750 } = config.theme.colors.primary;
@@ -159,16 +195,22 @@ function Chat ({ currentUser, currentMessage, setCurrentMessage, messages, setMe
 
 function ChatPage () {
     const router = useRouter();
-    const currentUser = useUserData(router.query.user);
-    const chatUser = useUserData(router.query.slug);
+    const currentUser = useUserData(router.query.username);
+    const chatId = router.query.chatid;
 
+    const [chatInfo, setChatInfo] = useState(null);
     const [currentMessage, setCurrentMessage] = useState("");
     const [messages, setMessages] = useState([]);
+
+    useEffect(() => {
+        getChat(chatId).then(data => setChatInfo(data))
+    }, [])
 
     return (
         <>
             <Background>
-                <Header userData={chatUser} />
+                <Header userData={currentUser} />
+                <ChatInfo chatInfo={chatInfo} />
                 <Chat
                     currentUser={currentUser}
                     currentMessage={currentMessage}

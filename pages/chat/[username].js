@@ -6,7 +6,7 @@ import { Background } from '../../components/Background';
 import { Header } from '../../components/Header';
 import { LoadingHeader } from '../../components/LoadingHeader';
 import { useUserData } from '../../hooks/useUserData';
-import { getChats } from '../../supabase'
+import { getChats } from '../../supabase';
 import config from '../../config.json';
 
 function HeaderProfile ({ userData }) {
