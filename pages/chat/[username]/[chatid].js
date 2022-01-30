@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Background } from '../../../components/Background';
 import { Header } from '../../../components/Header';
 import { LoadingHeader } from '../../../components/LoadingHeader';
+import { ArrowLeft } from '../../../icons/ArrowLeft';
 import { Send } from '../../../icons/Send';
 import { useUserData } from '../../../hooks/useUserData';
 import { getChat, getMessagesByChat, saveMessage, subscribeMessagesByChat } from '../../../supabase';
 import config from '../../../config.json';
 
-function ChatInfo ({ chatInfo }) {
+function ChatInfo ({ chatInfo, username }) {
     if (!chatInfo) {
         return (<LoadingHeader />);
     }
@@ -19,11 +21,21 @@ function ChatInfo ({ chatInfo }) {
     return (
         <>
             <section>
-                <p>{name}</p>
-                <small>{description}</small>
+                <Link href={`/chat/${username}`}>
+                    <a>
+                        <ArrowLeft color={blue700} />
+                    </a>
+                </Link>
+                <div>
+                    <p>{name}</p>
+                    <small>{description}</small>
+                </div>
             </section>
             <style jsx>{`
                 section {
+                    align-items: center;
+                    display: flex;
+                    gap: 16px;
                     background: ${blue100};
                     margin: 0 12px 16px;
                     padding: 16px;
@@ -36,6 +48,10 @@ function ChatInfo ({ chatInfo }) {
 
                 small {
                     color: ${blue700};
+                }
+
+                section :global(.ico-arrow-left) {
+                    cursor: pointer;
                 }
             `}</style>
         </>
@@ -204,7 +220,8 @@ function Chat ({ chatId, currentUser, currentMessage, setCurrentMessage, message
 
 function ChatPage () {
     const router = useRouter();
-    const currentUser = useUserData(router.query.username);
+    const username = router.query.username;
+    const currentUser = useUserData(username);
     const chatId = router.query.chatid;
 
     const [chatInfo, setChatInfo] = useState(null);
@@ -236,7 +253,7 @@ function ChatPage () {
         <>
             <Background>
                 <Header userData={currentUser} />
-                <ChatInfo chatInfo={chatInfo} />
+                <ChatInfo chatInfo={chatInfo} username={username} />
                 <Chat
                     chatId={chatId}
                     currentUser={currentUser}
