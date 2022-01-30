@@ -27,10 +27,19 @@ function getMessagesByChat (chatId) {
     return supabaseClient
         .from('messages')
             .select('*')
-            .eq('messages.chat_id', chatId)
+            .filter('chat_id', 'in', `(${chatId})`)
             .order('id', {ascending: false})
         .then(({data}) => data)
         .catch(() => []);
+}
+
+function saveChat (payload) {
+    return supabaseClient
+        .from('chat')
+        .insert([ payload ])
+        .then(({ data }) => {
+            console.log('Insert chat data', data);
+        })
 }
 
 function saveMessage (payload) {
@@ -38,7 +47,7 @@ function saveMessage (payload) {
         .from('messages')
         .insert([ payload ])
         .then(({ data }) => {
-            console.log('Inser message data', data);
+            console.log('Insert message data', data);
         })
 }
 
@@ -61,6 +70,7 @@ export {
     getChat,
     getChats,
     getMessagesByChat,
+    saveChat,
     saveMessage,
     subscribeChats,
     subscribeMessagesByChat

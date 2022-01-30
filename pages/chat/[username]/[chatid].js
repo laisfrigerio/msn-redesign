@@ -230,13 +230,14 @@ function ChatPage () {
 
     useEffect(() => {
         getChat(chatId).then(data => setChatInfo(data));
-        getMessagesByChat(chatId).then(data => setMessages(data));
     }, [])
 
     useEffect(() => {
         if (!chatId) {
             return;
         }
+
+        getMessagesByChat(chatId).then(data => setMessages(data));
 
         const subscription = subscribeMessagesByChat(chatId, (newMessage) => {
             setMessages((currentListMessages) => {

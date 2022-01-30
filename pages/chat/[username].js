@@ -6,7 +6,7 @@ import { Background } from '../../components/Background';
 import { Header } from '../../components/Header';
 import { LoadingHeader } from '../../components/LoadingHeader';
 import { useUserData } from '../../hooks/useUserData';
-import { getChats } from '../../supabase';
+import { getChats, subscribeChats } from '../../supabase';
 import config from '../../config.json';
 
 function HeaderProfile ({ userData }) {
@@ -156,6 +156,16 @@ function ListChatPage () {
 
     useEffect(() => {
         getChats().then((data) => setChats(data));
+
+        const subscription = subscribeChats((newChat) => {
+            setChats((currentChatList) => {
+                return [ newChat, ...currentChatList ]
+            });
+        });
+
+        return () => {
+            subscription.unsubscribe();
+        }
     }, []);
 
     return (
