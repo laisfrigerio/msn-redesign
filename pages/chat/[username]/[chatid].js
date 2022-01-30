@@ -42,14 +42,19 @@ function ChatInfo ({ chatInfo }) {
     );
 }
 
-function Message ({ message }) {
-    const { content, from_github_name } = message
+function Message ({ message, username }) {
+    const { content, from_github_login, from_github_name } = message
     const { green, blue100, blue700, blue750 } = config.theme.colors.primary;
+    const { white } = config.theme.colors.neutrals;
+
+    function isMessageFromCurrentUser () {
+        return username === from_github_login ? green : white;
+    }
 
     return (
         <>
             <li>
-                <div>{from_github_name} diz:</div>
+                <div>{from_github_name || from_github_login} diz:</div>
                 <p>{content}</p>
             </li>
             <style jsx>{`
@@ -57,7 +62,7 @@ function Message ({ message }) {
                     display: flex;
                     flex-direction: column;
                     align-items: flex-start;
-                    background: ${green};
+                    background: ${isMessageFromCurrentUser()};
                     margin: 10px;
                     border-radius: 16px;
                     padding: 12px;
@@ -83,7 +88,7 @@ function Message ({ message }) {
                     right: 16px;
                     border-left: 10px solid ${blue100};
                     border-right: 10px solid ${blue100};
-                    border-top: 10px solid ${green};
+                    border-top: 10px solid ${isMessageFromCurrentUser()};
                 }
             `}</style>
         </>
@@ -125,6 +130,7 @@ function Chat ({ chatId, currentUser, currentMessage, setCurrentMessage, message
                             <Message
                                 key={message.id}
                                 message={message}
+                                username={currentUser.login}
                             />
                         );
                     })}
