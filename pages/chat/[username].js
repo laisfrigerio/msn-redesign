@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import { ArrowDown } from '../../components/ArrowDown';
 import { Background } from '../../components/Background';
 import { Header } from '../../components/Header';
-import { LoadingHeader } from '../../components/LoadingHeader';
 import { Skeleton } from '../../components/Skeleton';
+import { SkeletonHeaderProfile } from '../../components/SkeletonHeaderProfile';
 import { useUserData } from '../../hooks/useUserData';
 import { getChats, subscribeChats } from '../../supabase';
 import config from '../../config.json';
@@ -30,29 +30,7 @@ function BackgroundList ({ children }) {
 
 function HeaderProfile ({ userData }) {
     if (!userData) {
-        return (
-            <>
-                <div className='skeleton'>
-                    <Skeleton isCircle height="50px" width="50px" />
-                    <div>
-                        <Skeleton height="15px" />
-                        <Skeleton height="15px" width="70%" />
-                    </div>
-                </div>
-                <style jsx>{`
-                    .skeleton {
-                        align-items: center;
-                        display: flex;
-                        padding: 8px 16px;
-                        gap: 8px;
-                    }
-    
-                    .skeleton div {
-                        width: 100%;
-                    }
-                `}</style>
-            </>
-        );
+        return <SkeletonHeaderProfile />;
     }
 
     return (
@@ -159,9 +137,9 @@ function ListChats ({ chats, username }) {
             <>
                 <div className='skeleton'>
                     <Skeleton borderRadius="10px" height="50px" />
-                    <Skeleton borderRadius="10px" height="50px" />
-                    <Skeleton borderRadius="10px" height="50px" />
-                    <Skeleton borderRadius="10px" height="50px" />
+                    <Skeleton borderRadius="10px" height="50px" width="80%" />
+                    <Skeleton borderRadius="10px" height="50px" width="50%" />
+                    <Skeleton borderRadius="10px" height="50px" width="30%" />
                 </div>
                 <style jsx>{`
                     .skeleton {

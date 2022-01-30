@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Background } from '../../../components/Background';
 import { Header } from '../../../components/Header';
-import { LoadingHeader } from '../../../components/LoadingHeader';
+import { Skeleton } from '../../../components/Skeleton';
 import { ArrowLeft } from '../../../icons/ArrowLeft';
 import { Send } from '../../../icons/Send';
 import { useUserData } from '../../../hooks/useUserData';
@@ -12,7 +12,30 @@ import config from '../../../config.json';
 
 function ChatInfo ({ chatInfo, username }) {
     if (!chatInfo) {
-        return (<LoadingHeader />);
+        return (
+            <>
+                <div className='skeleton'>
+                    <Skeleton isCircle height="10px" width="10px" />
+                    <div>
+                        <Skeleton borderRadius="10px" height="15px" />
+                        <Skeleton borderRadius="10px" height="15px" width="70%" />
+                    </div>
+                </div>
+                <style jsx>{`
+                    .skeleton {
+                        align-items: center;
+                        display: flex;
+                        margin: 0 12px 16px;
+                        padding: 16px;
+                        gap: 8px;
+                    }
+    
+                    .skeleton div {
+                        width: 100%;
+                    }
+                `}</style>
+            </>
+        );
     }
     
     const { name, description } = chatInfo

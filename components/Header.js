@@ -1,12 +1,12 @@
 import { ProfilePicture } from './ProfilePicture';
-import { LoadingHeader } from './LoadingHeader';
+import { SkeletonHeaderProfile } from './SkeletonHeaderProfile';
 import config from '../config.json';
 
 function Header ({ userData }) {
     const { blue700, blue750 } = config.theme.colors.primary;
 
     if (!userData) {
-        return (<LoadingHeader />);
+        return <SkeletonHeaderProfile />;
     }
 
     const { avatar_url, bio, html_url, name, login } = userData
