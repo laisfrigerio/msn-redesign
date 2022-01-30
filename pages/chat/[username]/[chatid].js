@@ -144,14 +144,16 @@ function Chat ({ chatId, currentUser, currentMessage, setCurrentMessage, message
     }
 
     function sendCurrentMessage () {
-        const payload = {
-            chat_id: chatId,
-            content: currentMessage,
-            from_github_name: currentUser.name,
-            from_github_login: currentUser.login
+        if (currentMessage !== '') {
+            const payload = {
+                chat_id: chatId,
+                content: currentMessage,
+                from_github_name: currentUser.name,
+                from_github_login: currentUser.login
+            }
+            setCurrentMessage('');
+            saveMessage(payload);
         }
-        setCurrentMessage('');
-        saveMessage(payload);
     }
 
     function onKeyPressInput (event) {
@@ -250,9 +252,6 @@ function ChatPage () {
     const [chatInfo, setChatInfo] = useState(null);
     const [currentMessage, setCurrentMessage] = useState("");
     const [messages, setMessages] = useState([]);
-
-    console.log('chatId', chatId);
-    console.log('chatInfo', chatInfo);
 
     useEffect(() => {
         getChat(chatId).then(data => setChatInfo(data));
