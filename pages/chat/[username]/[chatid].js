@@ -104,16 +104,20 @@ function Chat ({ chatId, currentUser, currentMessage, setCurrentMessage, message
         setCurrentMessage(message);
     }
 
-    function submitMessage (event) {
-        if (event.code === 'Enter') {
-            const payload = {
-                chat_id: chatId,
-                content: currentMessage,
-                from_github_name: currentUser.name,
-                from_github_login: currentUser.login
-            }
-            setCurrentMessage('');
-            saveMessage(payload);
+    function sendCurrentMessage () {
+        const payload = {
+            chat_id: chatId,
+            content: currentMessage,
+            from_github_name: currentUser.name,
+            from_github_login: currentUser.login
+        }
+        setCurrentMessage('');
+        saveMessage(payload);
+    }
+
+    function onKeyPressInput (event) {
+        if (event.code === 'Enter' && currentMessage !== '') {
+            sendCurrentMessage()
         }
     }
 
@@ -136,9 +140,9 @@ function Chat ({ chatId, currentUser, currentMessage, setCurrentMessage, message
                         type="text" 
                         value={currentMessage}
                         onChange={onChangeInput}
-                        onKeyPress={submitMessage}
+                        onKeyPress={onKeyPressInput}
                     />
-                    <button type="button">
+                    <button type="button" onClick={sendCurrentMessage}>
                         <Send
                             color={blue750}
                         />
@@ -186,6 +190,7 @@ function Chat ({ chatId, currentUser, currentMessage, setCurrentMessage, message
                 .input-area button {
                     background: ${green};
                     border-radius: 50%;
+                    cursor: pointer;
                     height: 35px;
                     position: absolute;
                     right: 10px;
