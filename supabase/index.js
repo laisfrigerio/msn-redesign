@@ -34,10 +34,26 @@ function getMessagesByChat (chatId) {
 }
 
 function saveMessage (payload) {
-    supabaseClient
+    return supabaseClient
         .from('messages')
         .insert([ payload ])
-        .then(({ data })=> console.log(data))
+        .then(({ data }) => {
+            console.log('Inser message data', data);
+        })
+}
+
+function subscribeChats () {
+    return supabaseClient
+        .from('chat')
+        .on('INSERT', () => console.log('Houve um insert no chat'))
+        .subscribe()
+}
+
+function subscribeMessagesByChat (chatId, addMessage) {
+    return supabaseClient
+        .from(`messages:chat_id=eq.${chatId}`)
+        .on('INSERT', (response) => addMessage(response.new))
+        .subscribe()
 }
 
 export {
@@ -45,5 +61,7 @@ export {
     getChat,
     getChats,
     getMessagesByChat,
-    saveMessage
+    saveMessage,
+    subscribeChats,
+    subscribeMessagesByChat
 }

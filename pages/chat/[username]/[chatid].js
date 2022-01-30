@@ -5,7 +5,7 @@ import { Header } from '../../../components/Header';
 import { LoadingHeader } from '../../../components/LoadingHeader';
 import { Send } from '../../../icons/Send';
 import { useUserData } from '../../../hooks/useUserData';
-import { getChat, getMessagesByChat, saveMessage } from '../../../supabase';
+import { getChat, getMessagesByChat, saveMessage, subscribeMessagesByChat } from '../../../supabase';
 import config from '../../../config.json';
 
 function ChatInfo ({ chatInfo }) {
@@ -112,10 +112,6 @@ function Chat ({ chatId, currentUser, currentMessage, setCurrentMessage, message
                 from_github_name: currentUser.name,
                 from_github_login: currentUser.login
             }
-
-            setMessages([
-                {...payload, id: messages.length + 1 },
-                ...messages]);
             setCurrentMessage('');
             saveMessage(payload);
         }
@@ -214,6 +210,22 @@ function ChatPage () {
         getChat(chatId).then(data => setChatInfo(data));
         getMessagesByChat(chatId).then(data => setMessages(data));
     }, [])
+
+    useEffect(() => {
+        if (!chatId) {
+            return;
+        }
+
+        const subscription = subscribeMessagesByChat(chatId, (newMessage) => {
+            setMessages((currentListMessages) => {
+                return [ newMessage, ...currentListMessages ]
+            });
+        });
+
+        return () => {
+            subscription.unsubscribe();
+        }
+    }, [chatId]);
 
     return (
         <>
