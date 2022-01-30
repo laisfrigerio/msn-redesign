@@ -50,6 +50,13 @@ And get into folder:
   $ cd msn-redesign
 ```
 
+Create an .env file with credentials from supabase.
+
+```
+  NEXT_PUBLIC_SUPABASE_KEY
+  NEXT_PUBLIC_SUPABASE_URL
+```
+
 Then, install dependencies
 
 ```
