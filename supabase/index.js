@@ -27,7 +27,7 @@ function getMessagesByChat (chatId) {
     return supabaseClient
         .from('messages')
             .select('*')
-            .eq('chat_id', chatId)
+            .eq('messages.chat_id', chatId)
             .order('id', {ascending: false})
         .then(({data}) => data)
         .catch(() => []);

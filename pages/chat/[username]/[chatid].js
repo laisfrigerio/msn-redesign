@@ -5,7 +5,7 @@ import { Header } from '../../../components/Header';
 import { LoadingHeader } from '../../../components/LoadingHeader';
 import { Send } from '../../../icons/Send';
 import { useUserData } from '../../../hooks/useUserData';
-import { getChat, saveMessage } from '../../../supabase';
+import { getChat, getMessagesByChat, saveMessage } from '../../../supabase';
 import config from '../../../config.json';
 
 function ChatInfo ({ chatInfo }) {
@@ -205,7 +205,8 @@ function ChatPage () {
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
-        getChat(chatId).then(data => setChatInfo(data))
+        getChat(chatId).then(data => setChatInfo(data));
+        getMessagesByChat(chatId).then(data => setMessages(data));
     }, [])
 
     return (
