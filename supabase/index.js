@@ -5,7 +5,6 @@ const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 async function getChat (chatId) {
-    console.log('chatId', chatId);
     return supabaseClient
         .from('chat')
             .select('*')
@@ -34,9 +33,17 @@ function getMessagesByChat (chatId) {
         .catch(() => []);
 }
 
+function saveMessage (payload) {
+    supabaseClient
+        .from('messages')
+        .insert([ payload ])
+        .then(({ data })=> console.log(data))
+}
+
 export {
     supabaseClient,
     getChat,
     getChats,
-    getMessagesByChat
+    getMessagesByChat,
+    saveMessage
 }

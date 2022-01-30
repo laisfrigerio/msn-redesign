@@ -5,7 +5,7 @@ import { Header } from '../../../components/Header';
 import { LoadingHeader } from '../../../components/LoadingHeader';
 import { Send } from '../../../icons/Send';
 import { useUserData } from '../../../hooks/useUserData';
-import { getChat } from '../../../supabase';
+import { getChat, saveMessage } from '../../../supabase';
 import config from '../../../config.json';
 
 function ChatInfo ({ chatInfo }) {
@@ -42,13 +42,14 @@ function ChatInfo ({ chatInfo }) {
     );
 }
 
-function Message ({ content, user }) {
+function Message ({ message }) {
+    const { content, from_github_name } = message
     const { green, blue100, blue700, blue750 } = config.theme.colors.primary;
 
     return (
         <>
             <li>
-                <div>{user.name} diz:</div>
+                <div>{from_github_name} diz:</div>
                 <p>{content}</p>
             </li>
             <style jsx>{`
@@ -89,10 +90,8 @@ function Message ({ content, user }) {
     );
 }
 
-function Chat ({ currentUser, currentMessage, setCurrentMessage, messages, setMessages }) {
+function Chat ({ chatId, currentUser, currentMessage, setCurrentMessage, messages, setMessages }) {
     const { green, blue100, blue750 } = config.theme.colors.primary;
-
-    console.log(messages);
 
     function onChangeInput (event) {
         event.preventDefault();
@@ -102,14 +101,18 @@ function Chat ({ currentUser, currentMessage, setCurrentMessage, messages, setMe
 
     function submitMessage (event) {
         if (event.code === 'Enter') {
+            const payload = {
+                chat_id: chatId,
+                content: currentMessage,
+                from_github_name: currentUser.name,
+                from_github_login: currentUser.login
+            }
+
             setMessages([
-                {
-                    id: messages.length + 1,
-                    content: currentMessage,
-                    user: currentUser
-                },
+                {...payload, id: messages.length + 1 },
                 ...messages]);
             setCurrentMessage('');
+            saveMessage(payload);
         }
     }
 
@@ -121,8 +124,7 @@ function Chat ({ currentUser, currentMessage, setCurrentMessage, messages, setMe
                         return (
                             <Message
                                 key={message.id}
-                                content={message.content}
-                                user={message.user}
+                                message={message}
                             />
                         );
                     })}
@@ -212,6 +214,7 @@ function ChatPage () {
                 <Header userData={currentUser} />
                 <ChatInfo chatInfo={chatInfo} />
                 <Chat
+                    chatId={chatId}
                     currentUser={currentUser}
                     currentMessage={currentMessage}
                     setCurrentMessage={setCurrentMessage}
