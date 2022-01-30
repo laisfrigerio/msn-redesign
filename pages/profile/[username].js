@@ -81,7 +81,7 @@ function Favorites ({ following, username }) {
             <>
                 <li className='card-user' key={id}>
                     <ProfilePicture img={avatar_url} />
-                    <Link href={`/chat/${login}`}>
+                    <Link href={`/chat/${username}/${login}`}>
                         <a>
                             <p>{login}</p>
                             <small>{html_url}</small>

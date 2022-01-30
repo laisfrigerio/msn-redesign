@@ -13,7 +13,7 @@ function Background ({ children }) {
                     width: 100%;
                     max-width: 600px;
                     margin: 20px auto 0;
-                    box-shadow: 0 8px 4px 0 rgb(229 229 229);
+                    box-shadow: 0px 0px 10px -1px rgb(237 237 237);
                 }
 
                 @media screen and (min-width: 642px) {

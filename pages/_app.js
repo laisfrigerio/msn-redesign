@@ -7,6 +7,7 @@ function GlobalStyle () {
             border: 0;
             box-sizing: border-box;
             list-style: none;
+            font-family: sans-serif;
         }
 
         body, html, #__next {
