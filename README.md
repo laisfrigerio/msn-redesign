@@ -10,6 +10,15 @@ Made with Next - Inspired by Igor Monteiro's Layout | [Behance](https://www.beha
   <a><img src="./screenshots/msn-redesign-aula-1-desktop.png" alt="Versão Desktop - Tela de Identificação" title="Versão Desktop - Tela de Identificação"></a>
 </p>
 
+<p align="center">
+  <a><img src="./screenshots/msn-redesign-aula-05-chat-list.png" alt="Versão Desktop - Tela de lista de chats" title="Versão Desktop - Tela de lista de chats"></a>
+</p>
+
+<p align="center">
+  <a><img src="./screenshots/msn-redesign-aula-05-chat-messages.png" alt="Versão Desktop - Tela que lista as mensagens de um chat" title="Versão Desktop - Tela que lista as mensagens de um chat"></a>
+</p>
+
+
 ## 🛠️ Stack
 
 - Next
@@ -19,6 +28,7 @@ Made with Next - Inspired by Igor Monteiro's Layout | [Behance](https://www.beha
 - CSS - Gradient
 - Responsive website
 - Flexbox
+- Supabase
 
 ## Run
 
