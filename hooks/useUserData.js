@@ -11,6 +11,7 @@ function useUserData (username) {
         fetch(`https://api.github.com/users/${username}`)
             .then((response) => response.json())
             .then((data) => setUserData(data))
+            .catch(() => setUserData(null))
     }, [username]);
 
     return userData

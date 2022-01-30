@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ArrowDown } from '../../components/ArrowDown';
 import { Background } from '../../components/Background';
+import { LoadingHeader } from '../../components/LoadingHeader';
 import { ProfilePicture } from '../../components/ProfilePicture';
 import { useUserData } from '../../hooks/useUserData';
 import config from '../../config.json';
@@ -11,9 +12,7 @@ function HeaderProfile ({ userData }) {
     const { blue700, blue750 } = config.theme.colors.primary;
 
     if (!userData) {
-        return (
-            <p>Loading ....</p>
-        );
+        return (<LoadingHeader />);
     }
 
     const { avatar_url, bio, name } = userData
@@ -116,6 +115,8 @@ function Favorites ({ following, username }) {
                 section {
                     background: ${blue100};
                     padding: 16px 24px;
+                    height: 500px;
+                    overflow-y: auto;
                 }
 
                 .title {

@@ -1,13 +1,12 @@
 import { ProfilePicture } from './ProfilePicture';
+import { LoadingHeader } from './LoadingHeader';
 import config from '../config.json';
 
 function HeaderChat ({ userData }) {
     const { blue700, blue750 } = config.theme.colors.primary;
 
     if (!userData) {
-        return (
-            <p>Loading ....</p>
-        );
+        return (<LoadingHeader />);
     }
 
     const { avatar_url, bio, name } = userData
