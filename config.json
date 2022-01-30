@@ -13,7 +13,8 @@
           "blue750": "#36537E"
         },
         "neutrals": {
-          "white": "#FFFFFF"
+          "white": "#FFFFFF",
+          "gray300": "#d7d7d7"
         }
       }
     }

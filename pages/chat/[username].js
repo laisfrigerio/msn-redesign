@@ -5,13 +5,54 @@ import { ArrowDown } from '../../components/ArrowDown';
 import { Background } from '../../components/Background';
 import { Header } from '../../components/Header';
 import { LoadingHeader } from '../../components/LoadingHeader';
+import { Skeleton } from '../../components/Skeleton';
 import { useUserData } from '../../hooks/useUserData';
 import { getChats, subscribeChats } from '../../supabase';
 import config from '../../config.json';
 
+function BackgroundList ({ children }) {
+    const { blue100 } = config.theme.colors.primary;
+
+    return (
+        <>
+            <section>{children}</section>
+            <style jsx>{`
+                section {
+                    background: ${blue100};
+                    padding: 16px 24px;
+                    height: 500px;
+                    overflow-y: auto;
+                }
+            `}</style>
+        </>
+    );
+}
+
 function HeaderProfile ({ userData }) {
     if (!userData) {
-        return (<LoadingHeader />);
+        return (
+            <>
+                <div className='skeleton'>
+                    <Skeleton isCircle height="50px" width="50px" />
+                    <div>
+                        <Skeleton height="15px" />
+                        <Skeleton height="15px" width="70%" />
+                    </div>
+                </div>
+                <style jsx>{`
+                    .skeleton {
+                        align-items: center;
+                        display: flex;
+                        padding: 8px 16px;
+                        gap: 8px;
+                    }
+    
+                    .skeleton div {
+                        width: 100%;
+                    }
+                `}</style>
+            </>
+        );
     }
 
     return (
@@ -113,15 +154,31 @@ function ListChatHeader () {
 }
 
 function ListChats ({ chats, username }) {
-    const { blue100 } = config.theme.colors.primary;
-
     if (!chats.length) {
-        return <></>;
+        return (
+            <>
+                <div className='skeleton'>
+                    <Skeleton borderRadius="10px" height="50px" />
+                    <Skeleton borderRadius="10px" height="50px" />
+                    <Skeleton borderRadius="10px" height="50px" />
+                    <Skeleton borderRadius="10px" height="50px" />
+                </div>
+                <style jsx>{`
+                    .skeleton {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 16px;
+                        width: 100%;
+                        padding: 24px 12px;
+                    }
+                `}</style>
+            </>
+        );
     }
 
     return (
         <>
-            <section>
+            <BackgroundList>
                 <ListChatHeader />
                 <ul>
                     {chats.map((chat) => {
@@ -134,15 +191,7 @@ function ListChats ({ chats, username }) {
                         );
                     })}
                 </ul>
-            </section>
-            <style jsx>{`
-                section {
-                    background: ${blue100};
-                    padding: 16px 24px;
-                    height: 500px;
-                    overflow-y: auto;
-                }
-            `}</style>
+            </BackgroundList>
         </>
     );
 }
